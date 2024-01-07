@@ -201,6 +201,16 @@ require('lazy').setup({
   -- },
 
   {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
+
+  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -594,6 +604,7 @@ require('which-key').register {
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+  ['<leader>x'] = { name = '[X] Trouble', _ = 'which_key_ignore' },
 }
 -- register which-key VISUAL mode
 -- required for visual <leader>hs (hunk stage) to work
@@ -713,15 +724,24 @@ cmp.setup {
 -- CONFIGURE HARPOON
 local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
-vim.keymap.set('n', '<leader>ha', function () mark.add_file() end, { desc = '[H]arpoon [A]dd File' })
+vim.keymap.set('n', '<leader>ha', function() mark.add_file() end, { desc = '[H]arpoon [A]dd File' })
 vim.keymap.set('n', '<leader>hv', function() ui.toggle_quick_menu() end, { desc = '[H]arpoon [V]iew Menu' })
 vim.keymap.set('n', '<C-h>', function() ui.nav_file(1) end, { desc = 'Harpoon File 1' })
-vim.keymap.set('n', '<C-j>', function()  ui.nav_file(2) end, { desc = 'Harpoon File 2' })
+vim.keymap.set('n', '<C-j>', function() ui.nav_file(2) end, { desc = 'Harpoon File 2' })
 vim.keymap.set('n', '<C-k>', function() ui.nav_file(3) end, { desc = 'Harpoon File 3' })
 vim.keymap.set('n', '<C-l>', function() ui.nav_file(4) end, { desc = 'Harpoon File 4' })
 vim.keymap.set('n', '<a-j>', function() ui.nav_next() end, { desc = 'Harpoon File 4' })
 vim.keymap.set('n', '<a-k>', function() ui.nav_prev() end, { desc = 'Harpoon File 4' })
 
+
+-- CONFIGURE TROBULE
+-- Lua
+vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, {desc = 'Trouble Toggle'})
+vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, {desc = 'Trouble workspace diagnostics'})
+vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end, {desc = 'Trouble document diagnostics'})
+vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end, {desc = 'Trouble quickfix'})
+vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end, {desc = 'Trouble loclist'})
+vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end, {desc = 'Trouble Lsp References'})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
