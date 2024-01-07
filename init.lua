@@ -68,6 +68,7 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  'ThePrimeagen/harpoon',
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -88,7 +89,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -113,7 +114,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -165,13 +166,13 @@ require('lazy').setup({
           gs.reset_hunk { vim.fn.line '.', vim.fn.line 'v' }
         end, { desc = 'reset git hunk' })
         -- normal mode
-        map('n', '<leader>hs', gs.stage_hunk, { desc = 'git stage hunk' })
-        map('n', '<leader>hr', gs.reset_hunk, { desc = 'git reset hunk' })
-        map('n', '<leader>hS', gs.stage_buffer, { desc = 'git Stage buffer' })
-        map('n', '<leader>hu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
-        map('n', '<leader>hR', gs.reset_buffer, { desc = 'git Reset buffer' })
-        map('n', '<leader>hp', gs.preview_hunk, { desc = 'preview git hunk' })
-        map('n', '<leader>hb', function()
+        map('n', '<leader>gs', gs.stage_hunk, { desc = 'git stage hunk' })
+        map('n', '<leader>gr', gs.reset_hunk, { desc = 'git reset hunk' })
+        map('n', '<leader>gS', gs.stage_buffer, { desc = 'git Stage buffer' })
+        map('n', '<leader>gu', gs.undo_stage_hunk, { desc = 'undo stage hunk' })
+        map('n', '<leader>gR', gs.reset_buffer, { desc = 'git Reset buffer' })
+        map('n', '<leader>gp', gs.preview_hunk, { desc = 'preview git hunk' })
+        map('n', '<leader>gb', function()
           gs.blame_line { full = false }
         end, { desc = 'git blame line' })
         map('n', '<leader>hd', gs.diffthis, { desc = 'git diff against index' })
@@ -257,8 +258,8 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- 'psliwka/vim-smoothie', 
--- {
+  -- 'psliwka/vim-smoothie',
+  -- {
   --   "nvim-tree/nvim-tree.lua",
   --   version = "*",
   --   lazy = false,
@@ -475,7 +476,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = {"c", "lua", "vim", "vimdoc", "query"},
+    ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -567,7 +568,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -709,6 +710,18 @@ cmp.setup {
   },
 }
 
+-- CONFIGURE HARPOON
+local mark = require("harpoon.mark")
+local ui = require("harpoon.ui")
+vim.keymap.set('n', '<leader>ha', function () mark.add_file() end, { desc = '[H]arpoon [A]dd File' })
+vim.keymap.set('n', '<leader>hv', function() ui.toggle_quick_menu() end, { desc = '[H]arpoon [V]iew Menu' })
+vim.keymap.set('n', '<C-h>', function() ui.nav_file(1) end, { desc = 'Harpoon File 1' })
+vim.keymap.set('n', '<C-j>', function()  ui.nav_file(2) end, { desc = 'Harpoon File 2' })
+vim.keymap.set('n', '<C-k>', function() ui.nav_file(3) end, { desc = 'Harpoon File 3' })
+vim.keymap.set('n', '<C-l>', function() ui.nav_file(4) end, { desc = 'Harpoon File 4' })
+vim.keymap.set('n', '<a-j>', function() ui.nav_next() end, { desc = 'Harpoon File 4' })
+vim.keymap.set('n', '<a-k>', function() ui.nav_prev() end, { desc = 'Harpoon File 4' })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
@@ -742,9 +755,10 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.keymap.set("n", "n", "nzzzv")
 -- vim.keymap.set("n", "N", "Nzzzv")
 vim.o.tabstop = 4
-vim.o.expandtab = 4
-vim.o.shifttabstop = 4
+-- vim.o.expandtab = 4
+-- vim.o.shifttabstop = 4
 vim.o.shiftwidth = 4
+vim.cmd(':se cursorline')
 
 -- // Some random globedlygook I'll look into later
 -- local cmp_nvim_lsp = require "cmp_nvim_lsp"
