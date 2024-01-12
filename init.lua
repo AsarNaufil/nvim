@@ -113,6 +113,23 @@ require('lazy').setup({
     },
   },
 
+  -- TODO
+  -- 'fedepujol/move.nvim',
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      "rcarriga/nvim-notify",
+    }
+  },
+
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
   {
@@ -199,6 +216,27 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'onedark'
   --   end,
   -- },
+
+  -- {
+    -- TODO : remap me
+    -- "christoomey/vim-tmux-navigator",
+    -- cmd = {
+    --   "TmuxNavigateLeft",
+    --   "TmuxNavigateDown",
+    --   "TmuxNavigateUp",
+    --   "TmuxNavigateRight",
+    --   "TmuxNavigatePrevious",
+    -- },
+    -- keys = {
+    --   { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+    --   { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+    --   { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+    --   { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+    --   { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+    -- },
+  -- },
+
+  'mg979/vim-visual-multi',
 
   {
     "folke/trouble.nvim",
@@ -331,6 +369,8 @@ require('lazy').setup({
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
+
+vim.api.nvim_set_keymap('n', '<M-f>', ':Format<CR>', { noremap = true, silent = true })
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -496,10 +536,10 @@ vim.defer_fn(function()
     incremental_selection = {
       enable = true,
       keymaps = {
-        init_selection = '<c-space>',
-        node_incremental = '<c-space>',
-        scope_incremental = '<c-s>',
-        node_decremental = '<M-space>',
+        init_selection = 'gnn',
+        node_incremental = 'grn',
+        scope_incremental = 'grc',
+        node_decremental = 'grm',
       },
     },
     textobjects = {
@@ -639,7 +679,7 @@ local servers = {
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
       -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      -- diagnostics = { disable = { 'missing-fields' } },
+      diagnostics = { disable = { 'missing-fields' } },
     },
   },
 }
@@ -726,22 +766,24 @@ local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
 vim.keymap.set('n', '<leader>ha', function() mark.add_file() end, { desc = '[H]arpoon [A]dd File' })
 vim.keymap.set('n', '<leader>hv', function() ui.toggle_quick_menu() end, { desc = '[H]arpoon [V]iew Menu' })
-vim.keymap.set('n', '<C-h>', function() ui.nav_file(1) end, { desc = 'Harpoon File 1' })
-vim.keymap.set('n', '<C-j>', function() ui.nav_file(2) end, { desc = 'Harpoon File 2' })
-vim.keymap.set('n', '<C-k>', function() ui.nav_file(3) end, { desc = 'Harpoon File 3' })
-vim.keymap.set('n', '<C-l>', function() ui.nav_file(4) end, { desc = 'Harpoon File 4' })
-vim.keymap.set('n', '<a-j>', function() ui.nav_next() end, { desc = 'Harpoon File 4' })
-vim.keymap.set('n', '<a-k>', function() ui.nav_prev() end, { desc = 'Harpoon File 4' })
+vim.keymap.set('n', '<a-h>', function() ui.nav_file(1) end, { desc = 'Harpoon File 1' })
+vim.keymap.set('n', '<a-j>', function() ui.nav_file(2) end, { desc = 'Harpoon File 2' })
+vim.keymap.set('n', '<a-k>', function() ui.nav_file(3) end, { desc = 'Harpoon File 3' })
+vim.keymap.set('n', '<a-l>', function() ui.nav_file(4) end, { desc = 'Harpoon File 4' })
+vim.keymap.set('n', '<a-n>', function() ui.nav_next() end, { desc = 'Harpoon to Next' })
+vim.keymap.set('n', '<a-p>', function() ui.nav_prev() end, { desc = 'Harpoon to Previous' })
 
 
 -- CONFIGURE TROBULE
 -- Lua
-vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, {desc = 'Trouble Toggle'})
-vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, {desc = 'Trouble workspace diagnostics'})
-vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end, {desc = 'Trouble document diagnostics'})
-vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end, {desc = 'Trouble quickfix'})
-vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end, {desc = 'Trouble loclist'})
-vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end, {desc = 'Trouble Lsp References'})
+vim.keymap.set("n", "<leader>xx", function() require("trouble").toggle() end, { desc = 'Trouble Toggle' })
+vim.keymap.set("n", "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end,
+  { desc = 'Trouble workspace diagnostics' })
+vim.keymap.set("n", "<leader>xd", function() require("trouble").toggle("document_diagnostics") end,
+  { desc = 'Trouble document diagnostics' })
+vim.keymap.set("n", "<leader>xq", function() require("trouble").toggle("quickfix") end, { desc = 'Trouble quickfix' })
+vim.keymap.set("n", "<leader>xl", function() require("trouble").toggle("loclist") end, { desc = 'Trouble loclist' })
+vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end, { desc = 'Trouble Lsp References' })
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
@@ -772,8 +814,6 @@ vim.g.netrw_winsize = 25
 -- Ctrl up/down
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
--- vim.keymap.set("n", "n", "nzzzv")
--- vim.keymap.set("n", "N", "Nzzzv")
 vim.o.tabstop = 4
 -- vim.o.expandtab = 4
 -- vim.o.shifttabstop = 4
@@ -815,10 +855,18 @@ vim.opt.shell = 'powershell.exe'
 vim.opt.shellcmdflag = '-nologo -noprofile -ExecutionPolicy RemoteSigned -command'
 vim.opt.shellxquote = ''
 
+-- I love this.
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set("n", "n", "nzzzv")
+
 -- Copy line to system clipboard
 -- vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 -- vim.keymap.set("n", "<leader>Y", [["+Y]])
 vim.cmd.colorscheme 'catppuccin'
+
 -- disable netrw
 -- vim.g.loaded_netrw = 1
 -- vim.g.loaded_netrwPlugin = 1
+
